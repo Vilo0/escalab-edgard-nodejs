@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 const ModelUsuario = require('../models/model_usuario');
 
 const pSignup = [
@@ -44,4 +44,6 @@ const vSignup = (req, res, next) => {
 
 const validateSignup = [pSignup, vSignup];
 
-module.exports = validateSignup;
+module.exports = {
+    validateSignup
+};
