@@ -1,5 +1,6 @@
 const ModelPregunta = require('../../models/model_pregunta');
 const ModelUsuario = require('../../models/model_usuario');
+const { cloudinary } = require('../../utils/cloudinary');
 
 // funcion handler que captura los errores
 function errorHandler(err, next, item) {
@@ -41,7 +42,7 @@ const preguntaById = (req, res, next, id) => {
 
 const listar = (req, res, next) => {
 
-    ModelPregunta.find().select('-imagen').where({ disponible: true }).exec((err, items) => {
+    ModelPregunta.find().where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 
@@ -77,8 +78,6 @@ const guardar = async(req, res, next) => {
 
     let idUsuario = req.params.usuarioId;
 
-    console.log(idUsuario);
-
     docUsuario = await ModelUsuario.findById(idUsuario).exec();
     console.log('docUsuario: ', docUsuario);
 
@@ -98,29 +97,22 @@ const guardar = async(req, res, next) => {
         descripcion: req.body.descripcion
     }
 
-    console.log(req.files);
-
     let modelPregunta = new ModelPregunta(data);
 
-    modelPregunta.imagen.data = req.files.imagen.data;
-    modelPregunta.imagen.contentType = req.files.imagen.mimetype;
+    // Subir archivo
+    const imagen = {
+        data: req.body.imagen,
+    };
 
-    if (req.files) {
-
-        if (req.files.imagen.size > 1000000) {
-            let err = new Error('Supera el tamaño máximo permitido');
-            err.statusCode = 413;
-            return next(err);
-        }
-
-    }
+    await cloudinary.uploader.upload(imagen.data, { tags: 'pregunta' }, function(err, image) {
+        console.log(image);
+        modelPregunta.imagen = image.url;
+        if (err) { console.warn(err); }
+    });
 
     modelPregunta.save((err, item) => {
 
         if (err || !item) return errorHandler(err, next, item);
-
-        item = item.toObject();
-        delete item.imagen;
 
         res.json({
             result: true,

@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 var cors = require('cors');
-const bcrypt = require('bcrypt');
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 console.log(`${ __dirname }`);
 
@@ -20,15 +21,49 @@ const routersV1 = require('./routers/v1');
 const app = express();
 
 
+// Extended: https://swagger.io/specification/#infoObject
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            version: '1.0.0',
+            title: 'Cursos Online API',
+            description: "Proyecto API para Escalab - Curso Escabalab Nodejs 2021",
+            contact: {
+                name: 'Edgard Vilo'
+            },
+            servers: ["http://localhost:3000", "https://escalab-edgard-vilo.herokuapp.com"]
+        },
+        components: {
+            securitySchemes: {
+                jwt: {
+                    type: 'apiKey',
+                    in: 'header',
+                    name: 'Authorization'
+                }
+            }
+        },
+        // security: [{
+        //     jwt: []
+        // }],
+    },
+    apis: [`${ __dirname }/routers/v1/*.js`]
+};
+
+// final definitions with swagger-express
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+
 // Habilitar body en el express
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Habilitar la opción de archivos en el express
 app.use(fileUpload({
     limits: { fileSize: 10 * 1024 * 1024 },
     // abortOnLimit: true
 }));
-
 
 // Habilitar uso de cors
 app.use(cors({

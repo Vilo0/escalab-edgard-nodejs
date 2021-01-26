@@ -27,8 +27,7 @@ let modelRespuesta = new mongoose.Schema({
         required: true
     },
     imagen: {
-        data: Buffer,
-        contentType: String
+        type: String
     },
     preguntaId: {
         type: Schema.Types.ObjectId,

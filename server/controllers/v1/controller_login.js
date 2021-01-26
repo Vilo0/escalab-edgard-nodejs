@@ -24,7 +24,7 @@ function errorHandler(err, next, item) {
 //===========
 // Login
 //==========
-const login = (req, res) => {
+const login = (req, res, next) => {
 
     let email = req.body.email;
     let password = req.body.password;
@@ -46,7 +46,7 @@ const login = (req, res) => {
             role: item.role
         }
 
-        let token = jwt.sign(payload, process.env.SEED, { expiresIn: '24h' });
+        let token = jwt.sign(payload, process.env.SEED, { expiresIn: '7d' });
 
         let user = item.toObject();
         delete user.password;

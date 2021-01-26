@@ -1,5 +1,6 @@
 const ModelLeccion = require('../../models/model_leccion');
 const ModelCurso = require('../../models/model_curso');
+const { cloudinary } = require('../../utils/cloudinary');
 
 // funcion handler que captura los errores
 function errorHandler(err, next, item) {
@@ -42,7 +43,8 @@ const leccionById = (req, res, next, id) => {
 
 const listar = (req, res, next) => {
 
-    ModelLeccion.find().select('-documento').where({ disponible: true }).exec((err, items) => {
+    // ModelLeccion.find().select('-documento').where({ disponible: true }).exec((err, items)
+    ModelLeccion.find().where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 
@@ -74,7 +76,7 @@ const getId = (req, res, next) => {
 // Registrar una Leccion
 // ================================
 
-const guardar = (req, res, next) => {
+const guardar = async(req, res, next) => {
 
     let idCurso = req.body.cursoId;
 
@@ -84,29 +86,22 @@ const guardar = (req, res, next) => {
         descripcion: req.body.descripcion
     }
 
-    console.log(req.files);
-
     let modelLeccion = new ModelLeccion(data);
 
-    modelLeccion.documento.data = req.files.documento.data;
-    modelLeccion.documento.contentType = req.files.documento.mimetype;
+    // Subir archivo
+    const documento = {
+        data: req.body.documento
+    };
 
-    if (req.files) {
-
-        if (req.files.documento.size > 1000000) {
-            let err = new Error('Supera el tamaño máximo permitido');
-            err.statusCode = 413;
-            return next(err);
-        }
-
-    }
+    await cloudinary.uploader.upload(documento.data, { tags: 'leccion' }, function(err, image) {
+        console.log(image);
+        modelLeccion.documento = image.url;
+        if (err) { console.warn(err); }
+    });
 
     modelLeccion.save(async(err, item) => {
 
         if (err || !item) return errorHandler(err, next, item);
-
-        item = item.toObject();
-        delete item.documento;
 
         docCurso = await ModelCurso.findById(idCurso).exec();
         await docCurso.addLeccion(item);

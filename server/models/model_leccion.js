@@ -13,8 +13,7 @@ let modelLeccion = new mongoose.Schema({
         required: true
     },
     documento: {
-        data: Buffer,
-        contentType: String
+        type: String
     },
     cursoId: {
         type: Schema.Types.ObjectId,

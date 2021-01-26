@@ -21,8 +21,7 @@ let modelCurso = new Schema({
         required: true
     },
     imagen: {
-        data: Buffer,
-        contentType: String
+        type: String
     },
     disponible: {
         type: Boolean,

@@ -1,4 +1,5 @@
 const ModelCurso = require('../../models/model_curso');
+const { cloudinary } = require('../../utils/cloudinary');
 
 // funcion handler que captura los errores
 function errorHandler(err, next, item) {
@@ -72,7 +73,7 @@ const getId = (req, res, next) => {
 // Registrar un Curso
 // ================================
 
-const guardar = (req, res, next) => {
+const guardar = async(req, res, next) => {
 
     let data = {
         nombre: req.body.nombre,
@@ -80,36 +81,52 @@ const guardar = (req, res, next) => {
         nombre_categoria: req.body.nombre_categoria
     }
 
-    console.log(req.files);
-
     let modelCurso = new ModelCurso(data);
 
-    modelCurso.imagen.data = req.files.imagen.data;
-    modelCurso.imagen.contentType = req.files.imagen.mimetype;
 
-    if (req.files) {
+    // Subir archivo
+    const imagen = {
+        data: req.body.imagen,
+    };
 
-        if (req.files.imagen.size > 1000000) {
-            let err = new Error('Supera el tamaño máximo permitido');
-            err.statusCode = 413;
-            return next(err);
-        }
-
-    }
+    await cloudinary.uploader.upload(imagen.data, { tags: 'curso' }, function(err, image) {
+        console.log(image);
+        modelCurso.imagen = image.url;
+        if (err) { console.warn(err); }
+    });
 
     modelCurso.save((err, item) => {
 
         if (err || !item) return errorHandler(err, next, item);
 
-        item = item.toObject();
-        delete item.imagen;
+        // item = item.toObject();
+        // delete item.imagen;
 
         res.json({
             result: true,
             data: item
         })
 
-    })
+    });
+
+    // await cloudinary.uploader.upload(imagen.data).then((result) => {
+
+    //     console.log(result);
+    //     modelCurso.imagen = result.url;
+
+    // }).catch((error) => {
+    //     return next(error);
+    // });
+
+    // if (req.files) {
+
+    //     if (req.files.imagen.size > 1000000) {
+    //         let err = new Error('Supera el tamaño máximo permitido');
+    //         err.statusCode = 413;
+    //         return next(err);
+    //     }
+
+    // }
 
 }
 
