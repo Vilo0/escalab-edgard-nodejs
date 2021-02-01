@@ -56,6 +56,8 @@ router.param('preguntaId', preguntaById);
  *     description: Retorna todas las preguntas
  *     produces:
  *       - application/json
+ *     security:
+ *	     - jwt: []
  *     responses:
  *       200:
  *         description: Un arreglo de preguntas

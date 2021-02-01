@@ -44,6 +44,8 @@ router.param('categoriaId', categoriaById);
  *     description: Retorna todas las categorias
  *     produces:
  *       - application/json
+ *     security:
+ *	     - jwt: []
  *     responses:
  *       200:
  *         description: Un arreglo de categorias

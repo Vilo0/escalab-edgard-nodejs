@@ -26,10 +26,6 @@ const { isAdmin, isAuth } = require('../../middlewares/auth');
  *           type: array
  *           items:
  *             type: object
- *       example:
- *          nombre: Desarrollo Css
- *          descripcion: Desarrollo css3 en simples pasos
- *          imagen: https://urlimagen.jpg
  */
 
 /**
@@ -90,6 +86,8 @@ router.param('cursoId', cursoById);
  *     description: Retorna todos los cursos
  *     produces:
  *       - application/json
+ *     security:
+ *	     - jwt: []
  *     responses:
  *       200:
  *         description: Un arreglo de cursos

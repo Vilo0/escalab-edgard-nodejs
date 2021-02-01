@@ -44,7 +44,7 @@ const leccionById = (req, res, next, id) => {
 const listar = (req, res, next) => {
 
     // ModelLeccion.find().select('-documento').where({ disponible: true }).exec((err, items)
-    ModelLeccion.find().where({ disponible: true }).exec((err, items) => {
+    ModelLeccion.where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 

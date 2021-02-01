@@ -42,7 +42,7 @@ const preguntaById = (req, res, next, id) => {
 
 const listar = (req, res, next) => {
 
-    ModelPregunta.find().where({ disponible: true }).exec((err, items) => {
+    ModelPregunta.where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 

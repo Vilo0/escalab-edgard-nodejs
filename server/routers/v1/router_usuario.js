@@ -56,9 +56,6 @@ const { isAdmin, isAuth } = require('../../middlewares/auth');
  *       telefono:
  *         type: string
  *         example: "+569 2234 6666"
- *       password:
- *         type: string
- *         example: "pass123"
  */
 
 const usuario = '/usuario';

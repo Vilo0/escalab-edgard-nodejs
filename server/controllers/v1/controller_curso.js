@@ -41,7 +41,7 @@ const cursoById = (req, res, next, id) => {
 
 const listar = (req, res, next) => {
 
-    ModelCurso.find().select('-imagen').where({ disponible: true }).exec((err, items) => {
+    ModelCurso.find().where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 

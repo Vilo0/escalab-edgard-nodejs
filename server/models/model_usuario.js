@@ -46,10 +46,6 @@ let ModelUsuario = new Schema({
                 type: Date,
                 required: true
             },
-            lecciones_completadas: {
-                type: Number,
-                required: true
-            },
             lecciones_totales: {
                 type: Number,
                 required: true
@@ -57,6 +53,14 @@ let ModelUsuario = new Schema({
             porcentaje_avance: {
                 type: Number,
                 required: true
+            },
+            lecciones: {
+                items: [{
+                    leccionId: {
+                        type: Schema.Types.ObjectId,
+                        ref: 'ModelLeccion'
+                    }
+                }]
             }
         }]
     }
@@ -72,7 +76,7 @@ ModelUsuario.methods.addCurso = function(curso, fecha) {
     let index = this.cursos.items.findIndex(item => {
 
         console.log(item);
-        console.log(curso._id);
+        console.log('curso: ', curso);
 
         return item.cursoId.toString() === curso._id.toString()
 
@@ -86,7 +90,7 @@ ModelUsuario.methods.addCurso = function(curso, fecha) {
             cursoId: curso._id,
             fecha_expiracion: fecha,
             lecciones_completadas: 0,
-            lecciones_totales: curso.lecciones.length,
+            lecciones_totales: curso.lecciones.items.length,
             porcentaje_avance: 0
         })
 
@@ -191,6 +195,99 @@ ModelUsuario.methods.desactivarCurso = function(curso) {
 
 }
 
+
+ModelUsuario.methods.leccionCompleta = function(leccion) {
+
+    let misLecciones = [];
+
+    let indexCurso = this.cursos.items.findIndex(item => {
+
+        console.log(item);
+
+        return item.cursoId.toString() === leccion.cursoId.toString()
+    });
+
+    let index = this.cursos.items[indexCurso].lecciones.items.findIndex(item => {
+
+        //console.log('item: ', item.leccionId);
+        console.log('leccion: ', leccion);
+
+        return item.leccionId.toString() === leccion._id.toString()
+
+    });
+
+    misLecciones = [...this.cursos.items[indexCurso].lecciones.items];
+
+    if (index < 0) {
+
+        misLecciones.push({
+            leccionId: leccion._id
+        })
+
+    }
+
+    let nuevasLecciones = {
+        items: misLecciones
+    }
+
+    this.cursos.items[indexCurso].lecciones = nuevasLecciones;
+
+    console.log('Lecciones completadas: ', this.cursos.items[indexCurso].lecciones.items.length);
+    console.log('lecciones totales', this.cursos.items[indexCurso].lecciones_totales);
+
+    this.cursos.items[indexCurso].porcentaje_avance = Math.floor(this.cursos.items[indexCurso].lecciones.items.length / this.cursos.items[indexCurso].lecciones_totales * 100);
+
+    console.log('porcentaje de avance: ', this.cursos.items[indexCurso].porcentaje_avance);
+
+    return this.save();
+
+}
+
+ModelUsuario.methods.leccionIncompleta = function(leccion) {
+
+    let misLecciones = [];
+
+    let indexCurso = this.cursos.items.findIndex(item => {
+
+        console.log(item);
+
+        return item.cursoId.toString() === leccion.cursoId.toString()
+    });
+
+    let index = this.cursos.items[indexCurso].lecciones.items.findIndex(item => {
+
+        //console.log('item: ', item.leccionId);
+        console.log('leccion: ', leccion);
+
+        return item.leccionId.toString() === leccion._id.toString()
+
+    });
+
+    misLecciones = [...this.cursos.items[indexCurso].lecciones.items];
+
+    if (index >= 0) {
+
+        delete misLecciones[index];
+        //misCursos.splice(index, index);
+
+    }
+
+    let nuevasLecciones = {
+        items: misLecciones
+    }
+
+    this.cursos.items[indexCurso].lecciones = nuevasLecciones;
+
+    console.log('Lecciones completadas: ', this.cursos.items[indexCurso].lecciones.items.length);
+    console.log('lecciones totales', this.cursos.items[indexCurso].lecciones_totales);
+
+    this.cursos.items[indexCurso].porcentaje_avance = Math.floor(this.cursos.items[indexCurso].lecciones.items.length / this.cursos.items[indexCurso].lecciones_totales * 100);
+
+    console.log('porcentaje de avance: ', this.cursos.items[indexCurso].porcentaje_avance);
+
+    return this.save();
+
+}
 
 const model = mongoose.model('ModelUsuario', ModelUsuario);
 

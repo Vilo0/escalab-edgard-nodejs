@@ -55,6 +55,8 @@ router.param('respuestaId', respuestaById);
  *     description: Retorna todas las respuestas
  *     produces:
  *       - application/json
+ *     security:
+ *	     - jwt: []
  *     responses:
  *       200:
  *         description: Un arreglo de respuestas

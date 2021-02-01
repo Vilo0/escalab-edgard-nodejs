@@ -76,6 +76,8 @@ router.param('leccionId', leccionById);
  *     description: Retorna todas las lecciones
  *     produces:
  *       - application/json
+ *     security:
+ *	     - jwt: []
  *     responses:
  *       200:
  *         description: Un arreglo de lecciones

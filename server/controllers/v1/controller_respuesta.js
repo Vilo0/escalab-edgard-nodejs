@@ -43,7 +43,7 @@ const respuestaById = (req, res, next, id) => {
 
 const listar = (req, res, next) => {
 
-    ModelRespuesta.find().where({ disponible: true }).exec((err, items) => {
+    ModelRespuesta.where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 

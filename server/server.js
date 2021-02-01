@@ -6,10 +6,17 @@ const fileUpload = require('express-fileupload');
 var cors = require('cors');
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const ModelUsuario = require('./models/model_usuario');
+const ModelCategoria = require('./models/model_categoria');
+const bcrypt = require('bcrypt');
 
 console.log(`${ __dirname }`);
 
-require('dotenv').config();
+if (process.env.NODE_ENV == 'development') {
+    require('dotenv').config({ path: `${ __dirname }/../.env.development` })
+} else {
+    require('dotenv').config()
+}
 
 const MONGO_URL = process.env.URL_MONGO;
 
@@ -31,8 +38,7 @@ const swaggerOptions = {
             description: "Proyecto API para Escalab - Curso Escabalab Nodejs 2021",
             contact: {
                 name: 'Edgard Vilo'
-            },
-            servers: ["http://localhost:3000", "https://escalab-edgard-vilo.herokuapp.com"]
+            }
         },
         components: {
             securitySchemes: {
@@ -42,7 +48,7 @@ const swaggerOptions = {
                     name: 'Authorization'
                 }
             }
-        },
+        }
         // security: [{
         //     jwt: []
         // }],
@@ -97,6 +103,34 @@ mongoose.connect(MONGO_URL, {
 }).then(() => {
 
     console.log('Mongo OK');
+
+    ModelUsuario.findOne({ email: 'admin@test.com' }, (err, user) => {
+        if (!user) {
+
+            let data = {
+                nombre: 'admin',
+                apellido: 'admin',
+                email: 'admin@test.com',
+                telefono: '5555 5555',
+                password: bcrypt.hashSync('123456', 10),
+                role: 'ADMIN_ROLE',
+            }
+            console.log('save............');
+            new ModelUsuario(data).save();
+
+        }
+    });
+
+    let ids = ['Desarrollo Web', 'Marketing Digital'];
+    ModelCategoria.find({ 'nombre': { $in: ids } })
+        .exec((err, items) => {
+            console.log(err);
+            console.log(items);
+            if (items.length == 0) {
+                new ModelCategoria({ nombre: "Desarrollo Web" }).save()
+                new ModelCategoria({ nombre: "Marketing Digital" }).save()
+            }
+        });
 
 }).catch((err) => {
     console.log(err);
