@@ -26,8 +26,6 @@ const { isAdmin, isAuth } = require('../../middlewares/auth');
  *           type: string
  *         cursos: 
  *           type: array
- *           items:
- *              $ref: '#/definitions/Curso'heroku
  *       example:
  *          nombre: Edgard
  *          apellido: Vilo
