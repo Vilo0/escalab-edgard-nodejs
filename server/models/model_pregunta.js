@@ -29,9 +29,10 @@ let modelPregunta = new mongoose.Schema({
     imagen: {
         type: String
     },
-    cursoId: {
+    leccionId: {
         type: Schema.Types.ObjectId,
-        ref: 'ModelCurso',
+        ref: 'ModelLeccion',
+        required: true,
     },
     disponible: {
         type: Boolean,

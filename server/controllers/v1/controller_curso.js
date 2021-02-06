@@ -56,6 +56,29 @@ const listar = (req, res, next) => {
 
 
 // ================================
+// Cursos por Categoria
+// ================================
+const listaxCategoria = (req, res, next) => {
+
+    console.log('params: ' + req.params.categoria);
+
+    ModelCurso.find({ nombre_categoria: req.params.categoria })
+        .where({ disponible: true })
+        .exec((err, items) => {
+
+            if (err || !items) return errorHandler(err, next, items)
+
+            res.json({
+                result: true,
+                data: items
+            })
+
+        })
+
+}
+
+
+// ================================
 // Obtener Curso
 // ================================
 
@@ -177,6 +200,7 @@ const borrar = (req, res, next) => {
 module.exports = {
     cursoById,
     getId,
+    listaxCategoria,
     listar,
     guardar,
     actualizar,

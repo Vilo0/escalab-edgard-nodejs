@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { respuestaById, getId, listar, guardar, actualizar, borrar } = require('../../controllers/v1/controller_respuesta');
+const { respuestaById, preguntaById, getId, listar, listaxPregunta, guardar, actualizar, borrar } = require('../../controllers/v1/controller_respuesta');
 
 const { isAuth, isAdmin } = require('../../middlewares/auth');
 
@@ -44,6 +44,7 @@ const router = express.Router();
 
 // params
 router.param('respuestaId', respuestaById);
+router.param('preguntaId', preguntaById);
 
 // routes
 /**
@@ -109,6 +110,41 @@ router.get(respuesta, isAuth, listar);
  */
 router.get(respuesta + '/:respuestaId', isAuth, getId);
 
+
+/**
+ * @swagger
+ * /api/v1/respuesta/pregunta/{idPregunta}:
+ *   get:
+ *     tags:
+ *       - Respuesta
+ *     description: Retorna todas las respuestas de una pregunta
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: idPregunta
+ *         description: Pregunta
+ *         in: path
+ *         required: true
+ *         type: string
+ *     security:
+ *	     - jwt: []
+ *     responses:
+ *       200:
+ *         description: Un arreglo de respuestas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 result:
+ *                   type: boolean
+ *                   default: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     $ref: '#/definitions/Respuesta'
+ */
+router.get(respuesta + '/pregunta/:preguntaId', isAuth, listaxPregunta);
 
 /**
  * @swagger

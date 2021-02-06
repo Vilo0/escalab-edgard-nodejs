@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { cursoById, getId, listar, guardar, actualizar, borrar } = require('../../controllers/v1/controller_curso');
+const { cursoById, getId, listar, guardar, actualizar, borrar, listaxCategoria } = require('../../controllers/v1/controller_curso');
 
 const { isAdmin, isAuth } = require('../../middlewares/auth');
 
@@ -111,22 +111,21 @@ router.get(curso, isAuth, listar);
  * @swagger
  * /api/v1/curso/{id}:
  *   get:
- *     tags:
+ *     tags: 
  *       - Curso
- *     description: Retorna un curso
- *     produces:
- *       - application/json
+ *     description: Obtiene un curso
+ *     produces: application/json
  *     parameters:
  *       - name: id
  *         description: Curso
  *         in: path
  *         required: true
- *         type: string
+ *         type: string'
  *     security:
  *	     - jwt: []
  *     responses:
  *       200:
- *         description: Un objeto del curso encontrado
+ *         description: Curso obtenido correctamente
  *         content:
  *           application/json:
  *             schema:
@@ -139,6 +138,42 @@ router.get(curso, isAuth, listar);
  *                   $ref: '#/definitions/Curso'
  */
 router.get(curso + '/:cursoId', isAuth, getId);
+
+
+/**
+ * @swagger
+ * /api/v1/curso/categoria/{idCategoria}:
+ *   get:
+ *     tags:
+ *       - Curso
+ *     description: Retorna todos los cursos de una categoria
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: idCategoria
+ *         description: Categoria
+ *         in: path
+ *         required: true
+ *         type: string
+ *     security:
+ *	     - jwt: []
+ *     responses:
+ *       200:
+ *         description: Un arreglo de cursos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 result:
+ *                   type: boolean
+ *                   default: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     $ref: '#/definitions/Curso'
+ */
+router.get('/curso/categoria/:categoria', listaxCategoria);
 
 
 /**

@@ -1,5 +1,6 @@
 const ModelPregunta = require('../../models/model_pregunta');
 const ModelUsuario = require('../../models/model_usuario');
+const ModelLeccion = require('../../models/model_leccion');
 const { cloudinary } = require('../../utils/cloudinary');
 
 // funcion handler que captura los errores
@@ -28,13 +29,32 @@ const preguntaById = (req, res, next, id) => {
 
             if (err || !item) return errorHandler(err, next, item)
 
-            req.docPregunta = item
-            next()
+            req.docPregunta = item;
+            next();
 
         })
 
 }
 
+
+// ================================
+// param id Leccion
+// ================================
+
+const leccionById = (req, res, next, id) => {
+
+    ModelLeccion.findById(id)
+        .where({ disponible: true })
+        .exec((err, item) => {
+
+            if (err || !item) return errorHandler(err, next, item)
+
+            req.docLeccion = item;
+            next();
+
+        })
+
+}
 
 // ================================
 // Lista de Preguntas
@@ -71,6 +91,26 @@ const getId = (req, res, next) => {
 
 
 // ================================
+// Lista de Preguntas por Leccion
+// ================================
+
+const listaxLeccion = (req, res, next) => {
+
+    ModelPregunta.where({ leccionId: req.docLeccion._id }).exec((err, items) => {
+
+        if (err || !items) return errorHandler(err, next, items)
+
+        res.json({
+            result: true,
+            data: items
+        })
+
+    })
+
+}
+
+
+// ================================
 // Registrar una Pregunta
 // ================================
 
@@ -93,7 +133,7 @@ const guardar = async(req, res, next) => {
             email: docUsuario.email,
             usuarioId: docUsuario._id
         },
-        cursoId: req.body.cursoId,
+        leccionId: req.body.leccionId,
         descripcion: req.body.descripcion
     }
 
@@ -169,8 +209,10 @@ const borrar = (req, res, next) => {
 
 module.exports = {
     preguntaById,
+    leccionById,
     getId,
     listar,
+    listaxLeccion,
     guardar,
     actualizar,
     borrar

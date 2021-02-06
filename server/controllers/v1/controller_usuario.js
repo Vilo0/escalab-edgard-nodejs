@@ -1,5 +1,5 @@
 const ModelUsuario = require('../../models/model_usuario');
-
+const ModelCurso = require('../../models/model_curso');
 
 // funcion handler que captura los errores
 function errorHandler(err, next, item) {
@@ -28,6 +28,25 @@ const usuarioById = (req, res, next, id) => {
 
             req.docUsuario = item
             next()
+
+        })
+
+}
+
+// ================================
+// param id curso
+// ================================
+
+const cursoById = (req, res, next, id) => {
+
+    ModelCurso.findById(id)
+        .where({ disponible: true })
+        .exec((err, item) => {
+
+            if (err || !item) return errorHandler(err, next, item)
+
+            req.docCurso = item;
+            next();
 
         })
 
@@ -63,6 +82,26 @@ const getId = (req, res, next) => {
     res.json({
         ok: true,
         data: req.docUsuario
+    })
+
+}
+
+
+// ================================
+// Lista de Usuarios
+// ================================
+
+const listaxCurso = (req, res, next) => {
+
+    ModelUsuario.find({ "cursos.items.cursoId": req.docCurso._id }).where({ disponible: true }).exec((err, items) => {
+
+        if (err || !items) return errorHandler(err, next, items)
+
+        res.json({
+            result: true,
+            data: items
+        })
+
     })
 
 }
@@ -143,8 +182,10 @@ const borrar = (req, res, next) => {
 
 module.exports = {
     usuarioById,
+    cursoById,
     getId,
     listar,
+    listaxCurso,
     guardar,
     actualizar,
     borrar

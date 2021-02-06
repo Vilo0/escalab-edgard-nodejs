@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { leccionById, getId, listar, guardar, actualizar, borrar } = require('../../controllers/v1/controller_leccion');
+const { leccionById, cursoById, getId, listar, listaxCurso, guardar, actualizar, borrar } = require('../../controllers/v1/controller_leccion');
 
 const { isAuth, isAdmin } = require('../../middlewares/auth');
 
@@ -64,6 +64,7 @@ const router = express.Router();
 
 // params
 router.param('leccionId', leccionById);
+router.param('cursoId', cursoById);
 
 // routes
 
@@ -130,6 +131,41 @@ router.get(leccion, isAuth, listar);
  */
 router.get(leccion + '/:leccionId', isAuth, getId);
 
+
+/**
+ * @swagger
+ * /api/v1/leccion/curso/{idCurso}:
+ *   get:
+ *     tags:
+ *       - Leccion
+ *     description: Retorna todas las lecciones de un curso
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: idCurso
+ *         description: Curso
+ *         in: path
+ *         required: true
+ *         type: string
+ *     security:
+ *	     - jwt: []
+ *     responses:
+ *       200:
+ *         description: Un arreglo de lecciones
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 result:
+ *                   type: boolean
+ *                   default: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     $ref: '#/definitions/Leccion'
+ */
+router.get(leccion + '/curso/:cursoId', isAuth, listaxCurso);
 
 /**
  * @swagger

@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { usuarioById, getId, listar, guardar, actualizar, borrar } = require('../../controllers/v1/controller_usuario');
+const { usuarioById, cursoById, getId, listar, listaxCurso, guardar, actualizar, borrar } = require('../../controllers/v1/controller_usuario');
 
 const { isAdmin, isAuth } = require('../../middlewares/auth');
 
@@ -27,7 +27,7 @@ const { isAdmin, isAuth } = require('../../middlewares/auth');
  *         cursos: 
  *           type: array
  *           items:
- *              type: string
+ *              $ref: '#/definitions/Curso'heroku
  *       example:
  *          nombre: Edgard
  *          apellido: Vilo
@@ -65,6 +65,7 @@ const router = express.Router();
 
 // params
 router.param('usuarioId', usuarioById);
+router.param('cursoId', cursoById);
 
 // routes
 /**
@@ -129,6 +130,42 @@ router.get(usuario, [isAuth, isAdmin], listar);
  *                   $ref: '#/definitions/Usuario'
  */
 router.get(usuario + '/:usuarioId', isAuth, getId);
+
+
+/**
+ * @swagger
+ * /api/v1/usuario/curso/{idCurso}:
+ *   get:
+ *     tags:
+ *       - Usuario
+ *     description: Retorna todos los usuarios de un curso
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: idCurso
+ *         description: Curso
+ *         in: path
+ *         required: true
+ *         type: string
+ *     security:
+ *	     - jwt: []
+ *     responses:
+ *       200:
+ *         description: Un arreglo de usuarios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 result:
+ *                   type: boolean
+ *                   default: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     $ref: '#/definitions/Usuario'
+ */
+router.get(usuario + '/curso/:cursoId', isAuth, listaxCurso);
 
 
 /**

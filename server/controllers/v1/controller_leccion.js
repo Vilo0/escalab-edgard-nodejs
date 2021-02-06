@@ -1,5 +1,6 @@
 const ModelLeccion = require('../../models/model_leccion');
 const ModelCurso = require('../../models/model_curso');
+
 const { cloudinary } = require('../../utils/cloudinary');
 
 // funcion handler que captura los errores
@@ -29,6 +30,26 @@ const leccionById = (req, res, next, id) => {
             if (err || !item) return errorHandler(err, next, item);
 
             req.docLeccion = item;
+            next();
+
+        })
+
+}
+
+
+// ================================
+// param id Curso
+// ================================
+
+const cursoById = (req, res, next, id) => {
+
+    ModelCurso.findById(id)
+        .where({ disponible: true })
+        .exec((err, item) => {
+
+            if (err || !item) return errorHandler(err, next, item);
+
+            req.docCurso = item;
             next();
 
         })
@@ -67,6 +88,27 @@ const getId = (req, res, next) => {
     res.json({
         ok: true,
         data: req.docLeccion
+    })
+
+}
+
+
+// ================================
+// Lecciones por Curso
+// ================================
+
+const listaxCurso = (req, res, next) => {
+
+    // ModelLeccion.find().select('-documento').where({ disponible: true }).exec((err, items)
+    ModelLeccion.find({ cursoId: req.docCurso._id }).where({ disponible: true }).exec((err, items) => {
+
+        if (err || !items) return errorHandler(err, next, items)
+
+        res.json({
+            result: true,
+            data: items
+        })
+
     })
 
 }
@@ -164,8 +206,10 @@ const borrar = (req, res, next) => {
 
 module.exports = {
     leccionById,
+    cursoById,
     getId,
     listar,
+    listaxCurso,
     guardar,
     actualizar,
     borrar

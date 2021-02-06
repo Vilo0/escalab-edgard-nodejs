@@ -1,4 +1,5 @@
 const ModelRespuesta = require('../../models/model_respuesta');
+const ModelPregunta = require('../../models/model_pregunta');
 const ModelUsuario = require('../../models/model_usuario');
 
 const { cloudinary } = require('../../utils/cloudinary');
@@ -38,12 +39,52 @@ const respuestaById = (req, res, next, id) => {
 
 
 // ================================
+// param id Pregunta
+// ================================
+
+const preguntaById = (req, res, next, id) => {
+
+    ModelPregunta.findById(id)
+        .where({ disponible: true })
+        .exec((err, item) => {
+
+            if (err || !item) return errorHandler(err, next, item)
+
+            req.docPregunta = item
+            next()
+
+        })
+
+}
+
+
+// ================================
 // Lista de Respuestas
 // ================================
 
 const listar = (req, res, next) => {
 
     ModelRespuesta.where({ disponible: true }).exec((err, items) => {
+
+        if (err || !items) return errorHandler(err, next, items)
+
+        res.json({
+            result: true,
+            data: items
+        })
+
+    })
+
+}
+
+
+// ================================
+// Lista de Respuestas por Pregunta
+// ================================
+
+const listaxPregunta = (req, res, next) => {
+
+    ModelRespuesta.find({ preguntaId: req.docPregunta._id }).where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 
@@ -172,8 +213,10 @@ const borrar = (req, res, next) => {
 
 module.exports = {
     respuestaById,
+    preguntaById,
     getId,
     listar,
+    listaxPregunta,
     guardar,
     actualizar,
     borrar
