@@ -52,9 +52,13 @@ const login = (req, res, next) => {
         delete user.password;
 
         res.json({
-            usuarioId: user._id,
-            role: user.role,
-            token: token
+            result: true,
+            data: {
+                usuarioId: item._id,
+                role: item.role,
+                nombre: item.nombre,
+                token: token
+            }
         });
 
     });

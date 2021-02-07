@@ -1,4 +1,5 @@
 const ModelCurso = require('../../models/model_curso');
+const ModelUsuario = require('../../models/model_usuario');
 const { cloudinary } = require('../../utils/cloudinary');
 
 // funcion handler que captura los errores
@@ -41,7 +42,7 @@ const cursoById = (req, res, next, id) => {
 
 const listar = (req, res, next) => {
 
-    ModelCurso.find().where({ disponible: true }).exec((err, items) => {
+    ModelCurso.where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 
@@ -106,7 +107,7 @@ const guardar = async(req, res, next) => {
 
     let modelCurso = new ModelCurso(data);
 
-
+    //console.log('imagen node: ', req.files.imagen);
     // Subir archivo
     const imagen = {
         data: req.body.imagen,

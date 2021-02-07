@@ -62,7 +62,7 @@ const leccionById = (req, res, next, id) => {
 
 const listar = (req, res, next) => {
 
-    ModelPregunta.where({ disponible: true }).exec((err, items) => {
+    ModelPregunta.find().populate('leccionId').where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 
@@ -102,7 +102,8 @@ const listaxLeccion = (req, res, next) => {
 
         res.json({
             result: true,
-            data: items
+            data: items,
+            leccion: req.docLeccion
         })
 
     })

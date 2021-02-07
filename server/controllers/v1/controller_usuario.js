@@ -1,6 +1,8 @@
 const ModelUsuario = require('../../models/model_usuario');
 const ModelCurso = require('../../models/model_curso');
 
+const bcrypt = require('bcrypt');
+
 // funcion handler que captura los errores
 function errorHandler(err, next, item) {
     // handle error
@@ -20,7 +22,7 @@ function errorHandler(err, next, item) {
 
 const usuarioById = (req, res, next, id) => {
 
-    ModelUsuario.findById(id)
+    ModelUsuario.findById(id).populate("cursos.items.cursoId")
         .where({ disponible: true })
         .exec((err, item) => {
 
@@ -118,7 +120,7 @@ const guardar = (req, res, next) => {
         apellido: req.body.apellido,
         email: req.body.email,
         telefono: req.body.telefono,
-        password: req.body.password
+        password: bcrypt.hashSync(req.body.password, Number(process.env.SALTH)),
     }
 
     let modelUsuario = new ModelUsuario(data)
