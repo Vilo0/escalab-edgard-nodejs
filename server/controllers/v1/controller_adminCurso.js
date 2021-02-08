@@ -70,7 +70,7 @@ const agregar = async(req, res, next) => {
     if (nuevoCurso) {
 
         res.json({
-            ok: true,
+            result: true,
             data: nuevoCurso
         });
 
@@ -93,7 +93,7 @@ const borrar = async(req, res, next) => {
     if (nuevoCurso) {
 
         res.json({
-            ok: true,
+            result: true,
             data: nuevoCurso
         });
 
@@ -116,7 +116,7 @@ const activar = async(req, res, next) => {
     if (nuevoCurso) {
 
         res.json({
-            ok: true,
+            result: true,
             data: nuevoCurso
         });
 
@@ -138,7 +138,7 @@ const desactivar = async(req, res, next) => {
     if (nuevoCurso) {
 
         res.json({
-            ok: true,
+            result: true,
             data: nuevoCurso
         });
 

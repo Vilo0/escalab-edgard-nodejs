@@ -195,7 +195,7 @@ const borrar = (req, res, next) => {
         await docCurso.deleteLeccion(item);
 
         res.json({
-            ok: true,
+            result: true,
             data: item
         })
 

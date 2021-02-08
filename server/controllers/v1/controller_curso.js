@@ -86,7 +86,7 @@ const listaxCategoria = (req, res, next) => {
 const getId = (req, res, next) => {
 
     res.json({
-        ok: true,
+        result: true,
         data: req.docCurso
     })
 
@@ -188,7 +188,7 @@ const borrar = (req, res, next) => {
         if (err || !item) return errorHandler(err, next, item)
 
         res.json({
-            ok: true,
+            result: true,
             data: item
         })
 

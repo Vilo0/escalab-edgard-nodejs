@@ -82,7 +82,7 @@ const listar = (req, res, next) => {
 const getId = (req, res, next) => {
 
     res.json({
-        ok: true,
+        result: true,
         data: req.docUsuario
     })
 

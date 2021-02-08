@@ -72,7 +72,7 @@ const completa = async(req, res, next) => {
     if (usuario) {
 
         res.json({
-            ok: true,
+            result: true,
             data: usuario
         });
 
@@ -95,7 +95,7 @@ const incompleta = async(req, res, next) => {
     if (usuario) {
 
         res.json({
-            ok: true,
+            result: true,
             data: usuario
         });
 
