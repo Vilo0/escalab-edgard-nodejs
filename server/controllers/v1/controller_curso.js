@@ -1,6 +1,7 @@
 const ModelCurso = require('../../models/model_curso');
 const ModelUsuario = require('../../models/model_usuario');
 const { cloudinary } = require('../../utils/cloudinary');
+const imageDataURI = require('image-data-uri');
 
 // funcion handler que captura los errores
 function errorHandler(err, next, item) {
@@ -107,17 +108,33 @@ const guardar = async(req, res, next) => {
 
     let modelCurso = new ModelCurso(data);
 
-    //console.log('imagen node: ', req.files.imagen);
-    // Subir archivo
+
     const imagen = {
         data: req.body.imagen,
     };
 
-    await cloudinary.uploader.upload(imagen.data, { tags: 'curso' }, function(err, image) {
-        console.log(image);
-        modelCurso.imagen = image.url;
-        if (err) { console.warn(err); }
-    });
+    if (imagen.data) {
+
+        // Subir archivo
+        await cloudinary.uploader.upload(imagen.data, { tags: 'curso' }, function(err, image) {
+            console.log(image);
+            modelCurso.imagen = image.url;
+            if (err) { console.warn(err); }
+        });
+
+    } else {
+
+        let dataBuffer = new Buffer.from(req.files.imagen.data);
+
+        const imagen = imageDataURI.encode(dataBuffer, req.files.imagen.mimetype);
+
+        await cloudinary.uploader.upload(imagen, { tags: 'curso' }, function(err, image) {
+            modelCurso.imagen = image.url;
+            if (err) { console.warn(err); }
+        });
+
+    }
+
 
     modelCurso.save((err, item) => {
 

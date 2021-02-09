@@ -53,10 +53,43 @@ const { isAuth, isAdmin } = require('../../middlewares/auth');
  *         default: Variables var vs let
  *       descripcion:
  *         default: Mas información proximamente
- *       imagen:
+ *       documento:
  *         default: https//leccionUrl.jpg
  *       cursoId:
  *         default: 600c6ecf74dd6279c434e560
+ *       createdAt:
+ *         default: 2021-02-09T01:52:27.780Z
+ *       updatedAt:
+ *         default: 2021-02-09T01:53:16.267Z
+ *       __v:
+ *         default: 0
+ */
+
+
+/**
+ * @swagger
+ * definitions:
+ *   LeccionDelete:
+ *     type: object
+ *     properties:
+ *       disponible:
+ *         default: true
+ *       _id:
+ *         default: 600ccf052599bb0015fa95c4
+ *       nombre:
+ *         default: Variables var vs let
+ *       descripcion:
+ *         default: Mas información proximamente
+ *       documento:
+ *         default: https//leccionUrl.jpg
+ *       cursoId:
+ *         default: 600c6ecf74dd6279c434e560
+ *       createdAt:
+ *         default: 2021-02-09T01:52:27.780Z
+ *       updatedAt:
+ *         default: 2021-02-09T01:53:16.267Z
+ *       __v:
+ *         default: 0
  */
 const leccion = '/leccion'
 
@@ -122,7 +155,7 @@ router.get(leccion, isAuth, listar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -192,7 +225,7 @@ router.get(leccion + '/curso/:cursoId', isAuth, listaxCurso);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -231,7 +264,7 @@ router.post(leccion, [isAuth, isAdmin], guardar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -270,7 +303,7 @@ router.put(leccion + '/:leccionId', [isAuth, isAdmin], actualizar);
  *                   default: true
  *                 data:
  *                   type: object
- *                   $ref: '#/definitions/Leccion'
+ *                   $ref: '#/definitions/LeccionDelete'
  */
 router.delete(leccion + '/:leccionId', [isAuth, isAdmin], borrar);
 

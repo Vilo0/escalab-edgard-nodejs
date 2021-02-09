@@ -120,7 +120,7 @@ router.get(usuario, [isAuth, isAdmin], listar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -191,7 +191,7 @@ router.get(usuario + '/curso/:cursoId', isAuth, listaxCurso);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -230,7 +230,7 @@ router.post(usuario, [isAuth, isAdmin], guardar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:

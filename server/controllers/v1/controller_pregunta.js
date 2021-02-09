@@ -2,6 +2,7 @@ const ModelPregunta = require('../../models/model_pregunta');
 const ModelUsuario = require('../../models/model_usuario');
 const ModelLeccion = require('../../models/model_leccion');
 const { cloudinary } = require('../../utils/cloudinary');
+const imageDataURI = require('image-data-uri');
 
 // funcion handler que captura los errores
 function errorHandler(err, next, item) {
@@ -120,7 +121,6 @@ const guardar = async(req, res, next) => {
     let idUsuario = req.params.usuarioId;
 
     docUsuario = await ModelUsuario.findById(idUsuario).exec();
-    console.log('docUsuario: ', docUsuario);
 
     if (!docUsuario) {
         let err = new Error('usuario no existe');
@@ -145,11 +145,25 @@ const guardar = async(req, res, next) => {
         data: req.body.imagen,
     };
 
-    await cloudinary.uploader.upload(imagen.data, { tags: 'pregunta' }, function(err, image) {
-        console.log(image);
-        modelPregunta.imagen = image.url;
-        if (err) { console.warn(err); }
-    });
+    if (imagen.data) {
+
+        await cloudinary.uploader.upload(imagen.data, { tags: 'pregunta' }, function(err, image) {
+            console.log(image);
+            modelPregunta.imagen = image.url;
+            if (err) { console.warn(err); }
+        });
+
+    } else {
+
+        let dataBuffer = new Buffer.from(req.files.imagen.data);
+        const imagen = imageDataURI.encode(dataBuffer, req.files.imagen.mimetype);
+
+        await cloudinary.uploader.upload(imagen, { tags: 'curso' }, function(err, image) {
+            modelPregunta.imagen = image.url;
+            if (err) { console.warn(err); }
+        });
+
+    }
 
     modelPregunta.save((err, item) => {
 

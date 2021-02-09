@@ -19,8 +19,8 @@ const { isAuth, isAdmin } = require('../../middlewares/auth');
  *           type: string
  *         documento:
  *           type: string
- *         Curso:
- *            type: objectId
+ *         leccionId:
+ *            type: string
  */
 
 /**
@@ -29,14 +29,72 @@ const { isAuth, isAdmin } = require('../../middlewares/auth');
  *   Pregunta:
  *     type: object
  *     properties:
+ *       disponible:
+ *         default: true
+ *       _id:
+ *         default: 6021ee13d6b72672e04db691
+ *       usuario:
+ *         type: object
+ *         properties:
+ *           nombre:
+ *             default: Edgard
+ *           apellido:
+ *             default: Vilo
+ *           email:
+ *             default: escalab@mail.com
+ *           usuarioId:
+ *             default: 60173205dbef124a2cc44de9
  *       nombre:
  *         default: Esta es una pregunta de prueba
  *       descripcion:
  *         default: Descripcion de una pregunta para el demo
  *       imagen:
  *         default: https://preguntaurl.jpg
- *       Curso:
+ *       leccionId:
  *         default: 600f7167f3200634f40d90d8
+ *       createdAt:
+ *         default: 2021-02-09T02:06:12.447Z
+ *       updatedAt:
+ *         default: 2021-02-09T02:06:12.447Z
+ *       __v:
+ *         default: 0
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *   PreguntaDelete:
+ *     type: object
+ *     properties:
+ *       disponible:
+ *         default: false
+ *       _id:
+ *         default: 6021ee13d6b72672e04db691
+ *       usuario:
+ *         type: object
+ *         properties:
+ *           nombre:
+ *             default: Edgard
+ *           apellido:
+ *             default: Vilo
+ *           email:
+ *             default: escalab@mail.com
+ *           usuarioId:
+ *             default: 60173205dbef124a2cc44de9
+ *       nombre:
+ *         default: Esta es una pregunta de prueba
+ *       descripcion:
+ *         default: Descripcion de una pregunta para el demo
+ *       imagen:
+ *         default: https://preguntaurl.jpg
+ *       leccionId:
+ *         default: 600f7167f3200634f40d90d8
+ *       createdAt:
+ *         default: 2021-02-09T02:06:12.447Z
+ *       updatedAt:
+ *         default: 2021-02-09T02:06:12.447Z
+ *       __v:
+ *         default: 0
  */
 const pregunta = '/pregunta';
 
@@ -251,7 +309,7 @@ router.put(pregunta + '/:preguntaId', isAuth, actualizar);
  *                   default: true
  *                 data:
  *                   type: object
- *                   $ref: '#/definitions/Pregunta'
+ *                   $ref: '#/definitions/PreguntaDelete'
  */
 router.delete(pregunta + '/:preguntaId', isAuth, borrar);
 

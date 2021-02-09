@@ -47,9 +47,47 @@ const { isAdmin, isAuth } = require('../../middlewares/auth');
  *       nombre_categoria:
  *         default: Desarrollo Web
  *       lecciones:
- *         default: [ 600c6ecf74dd6279c434e560 ]
+ *         type: array
+ *         items: 
+ *           type: object
+ *           properties:
+ *             _id:
+ *               default: 60157b8bb00f6640dcebd147
+ *             leccionId:
+ *               default: 60157b8ab00f6640dcebd146
+ *  
  */
 
+
+/**
+ * @swagger
+ * definitions:
+ *   CursoDelete:
+ *     type: object
+ *     properties:
+ *       disponible:
+ *         default: false
+ *       _id:
+ *         default: 600c6ecf74dd6279c434e569
+ *       nombre:
+ *         default: Curso actualizado de HTML
+ *       descripcion:
+ *         default: Html, css, y javascript 2.0
+ *       imagen:
+ *         default: https://urlImagen.jpg
+ *       nombre_categoria:
+ *         default: Desarrollo Web
+ *       lecciones:
+ *         type: array
+ *         items: 
+ *           type: object
+ *           properties:
+ *             _id:
+ *               default: 60157b8bb00f6640dcebd147
+ *             leccionId:
+ *               default: 60157b8ab00f6640dcebd146
+ *  
+ */
 
 /**
  * @swagger
@@ -65,8 +103,6 @@ const { isAdmin, isAuth } = require('../../middlewares/auth');
  *         default: https://urlImagen.jpg
  *       nombre_categoria:
  *         default: Desarrollo Web
- *       lecciones:
- *         default: [ 600c6ecf74dd6279c434e560 ]
  */
 const curso = '/curso';
 
@@ -130,7 +166,7 @@ router.get(curso, isAuth, listar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -142,7 +178,7 @@ router.get(curso + '/:cursoId', isAuth, getId);
 
 /**
  * @swagger
- * /api/v1/curso/categoria/{idCategoria}:
+ * /api/v1/curso/categoria/{nombreCategoria}:
  *   get:
  *     tags:
  *       - Curso
@@ -150,7 +186,7 @@ router.get(curso + '/:cursoId', isAuth, getId);
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: idCategoria
+ *       - name: nombreCategoria
  *         description: Categoria
  *         in: path
  *         required: true
@@ -173,7 +209,7 @@ router.get(curso + '/:cursoId', isAuth, getId);
  *                     type: object
  *                     $ref: '#/definitions/Curso'
  */
-router.get('/curso/categoria/:categoria', listaxCategoria);
+router.get('/curso/categoria/:categoria', isAuth, listaxCategoria);
 
 
 /**
@@ -201,7 +237,7 @@ router.get('/curso/categoria/:categoria', listaxCategoria);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -240,7 +276,7 @@ router.post(curso, [isAuth, isAdmin], guardar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -279,7 +315,7 @@ router.put(curso + '/:cursoId', [isAuth, isAdmin], actualizar);
  *                   default: true
  *                 data:
  *                   type: object
- *                   $ref: '#/definitions/Curso'
+ *                   $ref: '#/definitions/CursoDelete'
  */
 router.delete(curso + '/:cursoId', [isAuth, isAdmin], borrar);
 

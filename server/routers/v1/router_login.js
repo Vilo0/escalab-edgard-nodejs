@@ -38,7 +38,7 @@ const router = express.Router();
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -52,67 +52,5 @@ const router = express.Router();
  *                       default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvSWQiOiI2MDBhMTg1Mjc3NmY1YTVhZDAxYzc2ZmIiLCJyb2xlIjoiQURNSU5fUk9MRSIsImlhdCI6MTYxMTYxNjI3MiwiZXhwIjoxNjEyMjIxMDcyfQ.ENCLf_WqSnwpqXsSENDfhHQDfueBa1WRoq6DKTk3JdI
  */
 router.post('/login', login);
-
-
-/**
- * @swagger
- * /api/v1/signup:
- *   post:
- *     tags:
- *       - Register
- *     description: Registro usuario
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: Registro de usuario
- *         description: Datos necesarios para el registro
- *         in: body
- *         required: true
- *         type: object
- *         properties:
- *            nombre:
- *              type: string
- *              default: Edgard
- *            apellido:
- *             type: string
- *             default: Vilo
- *            email:
- *              type: string
- *              default: escalab@mail.com
- *            password:
- *              type: string
- *              default: escabalNode
- *     responses:
- *       200:
- *         description: Login realizado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               properties:
- *                 ok:
- *                   type: boolean
- *                   default: true
- *                 data:
- *                   type: object
- *                   properties:
- *                     cursos: 
- *                       type: object
- *                       properties:
- *                         items:
- *                           default: []
- *                     role:
- *                       default: USER_ROLE
- *                     disponible:
- *                       default: true
- *                     _id: 
- *                       default: 600f7167f3200634f40d90d7
- *                     nombre:
- *                       default: Edgard
- *                     apellido:
- *                       default: Vilo
- *                     email:
- *                       default: escalab@mail.com
- */
-router.post('/signup', validateSignup, signup);
 
 module.exports = router;

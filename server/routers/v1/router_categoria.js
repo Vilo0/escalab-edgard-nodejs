@@ -24,6 +24,46 @@ const { isAdmin, isAuth } = require('../../middlewares/auth');
  *   Categoria:
  *     type: object
  *     properties:
+ *       disponible:
+ *         default: true
+ *       _id: 
+ *         default: 60157b26b00f6640dcebd141
+ *       nombre:
+ *         default: "Desarrollo Web"
+ *       createdAt:
+ *         default: 2021-01-30T15:28:38.315Z
+ *       updatedAt:
+ *         default: 2021-01-31T18:39:54.826Z
+ *       __v:
+ *         default: 0
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *   CategoriaDelete:
+ *     type: object
+ *     properties:
+ *       disponible:
+ *         default: false
+ *       _id: 
+ *         default: 60157b26b00f6640dcebd141
+ *       nombre:
+ *         default: "Desarrollo Web"
+ *       createdAt:
+ *         default: 2021-01-30T15:28:38.315Z
+ *       updatedAt:
+ *         default: 2021-01-31T18:39:54.826Z
+ *       __v:
+ *         default: 0
+ */
+
+/**
+ * @swagger
+ * definitions:
+ *   CategoriaCrud:
+ *     type: object
+ *     properties:
  *       nombre:
  *         default: "Desarrollo Web"
  */
@@ -62,7 +102,7 @@ router.param('categoriaId', categoriaById);
  *                     type: object
  *                     $ref: '#/definitions/Categoria'
  */
-router.get(categoria, listar);
+router.get(categoria, isAuth, listar);
 
 /**
  * @swagger
@@ -88,7 +128,7 @@ router.get(categoria, listar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -113,7 +153,7 @@ router.get(categoria + '/:categoriaId', getId);
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/Categoria'
+ *           $ref: '#/definitions/CategoriaCrud'
  *     security:
  *	     - jwt: []
  *     responses:
@@ -123,7 +163,7 @@ router.get(categoria + '/:categoriaId', getId);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -152,7 +192,7 @@ router.post(categoria, [isAuth, isAdmin], guardar);
  *         description: Datos para actualizar la categoria
  *         schema:
  *           type: object
- *           $ref: '#/definitions/Categoria'
+ *           $ref: '#/definitions/CategoriaCrud'
  *     security:
  *	     - jwt: []
  *     responses:
@@ -162,7 +202,7 @@ router.post(categoria, [isAuth, isAdmin], guardar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -201,7 +241,7 @@ router.put(categoria + '/:categoriaId', [isAuth, isAdmin], actualizar);
  *                   default: true
  *                 data:
  *                   type: object
- *                   $ref: '#/definitions/Categoria'
+ *                   $ref: '#/definitions/CategoriaDelete'
  */
 router.delete(categoria + '/:categoriaId', [isAuth, isAdmin], borrar);
 

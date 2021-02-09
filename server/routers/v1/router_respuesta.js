@@ -26,7 +26,7 @@ const { isAuth, isAdmin } = require('../../middlewares/auth');
 /**
  * @swagger
  * definitions:
- *   Respuesta:
+ *   RespuestaBody:
  *     type: object
  *     properties:
  *       nombre:
@@ -35,9 +35,86 @@ const { isAuth, isAdmin } = require('../../middlewares/auth');
  *         default: Descripcion de una respuesta para el demo
  *       imagen:
  *         default: https://respuestaurl.jpg
- *       Pregunta:
+ *       preguntaId:
  *         default: 600f7167f3200634f40d90dU
  */
+
+/**
+ * @swagger
+ * definitions:
+ *   Respuesta:
+ *     type: object
+ *     properties:
+ *       usuario: 
+ *         type: object
+ *         properties:
+ *           nombre:
+ *             default: Edgard
+ *           apellido:
+ *             default: Vilo
+ *           email:
+ *             default: thevilos@gmail.com
+ *           usuarioId:
+ *             default: 601f1570ccb54906a47796d7
+ *       disponible:
+ *         default: true
+ *       _id:
+ *         default: 601fe453d6d0885380a0e076
+ *       nombre:
+ *         default: Esta es una respuesta de prueba
+ *       descripcion:
+ *         default: Descripcion de una respuesta para el demo
+ *       imagen:
+ *         default: https://respuestaurl.jpg
+ *       preguntaId:
+ *         default: 600f7167f3200634f40d90dU
+ *       createdAt:
+ *         default: 2021-02-07T13:00:04.522Z
+ *       updatedAt:
+ *         default: 2021-02-07T13:00:04.522Z
+ *       __v:
+ *         default: 0
+ */
+
+
+/**
+ * @swagger
+ * definitions:
+ *   RespuestaDelete:
+ *     type: object
+ *     properties:
+ *       usuario: 
+ *         type: object
+ *         properties:
+ *           nombre:
+ *             default: Edgard
+ *           apellido:
+ *             default: Vilo
+ *           email:
+ *             default: thevilos@gmail.com
+ *           usuarioId:
+ *             default: 601f1570ccb54906a47796d7
+ *       disponible:
+ *         default: false
+ *       _id:
+ *         default: 601fe453d6d0885380a0e076
+ *       nombre:
+ *         default: Esta es una respuesta de prueba
+ *       descripcion:
+ *         default: Descripcion de una respuesta para el demo
+ *       imagen:
+ *         default: https://respuestaurl.jpg
+ *       preguntaId:
+ *         default: 600f7167f3200634f40d90dU
+ *       createdAt:
+ *         default: 2021-02-07T13:00:04.522Z
+ *       updatedAt:
+ *         default: 2021-02-07T13:00:04.522Z
+ *       __v:
+ *         default: 0
+ */
+
+
 const respuesta = '/respuesta';
 
 const router = express.Router();
@@ -101,7 +178,7 @@ router.get(respuesta, isAuth, listar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -161,7 +238,7 @@ router.get(respuesta + '/pregunta/:preguntaId', isAuth, listaxPregunta);
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/Respuesta'
+ *           $ref: '#/definitions/RespuestaBody'
  *     security:
  *	     - jwt: []
  *     responses:
@@ -171,7 +248,7 @@ router.get(respuesta + '/pregunta/:preguntaId', isAuth, listaxPregunta);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -200,7 +277,7 @@ router.post(respuesta + '/usuario/:usuarioId', [isAuth, isAdmin], guardar);
  *         description: Datos para actualizar la respuesta
  *         schema:
  *           type: object
- *           $ref: '#/definitions/Respuesta'
+ *           $ref: '#/definitions/RespuestaBody'
  *     security:
  *	     - jwt: []
  *     responses:
@@ -210,7 +287,7 @@ router.post(respuesta + '/usuario/:usuarioId', [isAuth, isAdmin], guardar);
  *           application/json:
  *             schema:
  *               properties:
- *                 ok:
+ *                 result:
  *                   type: boolean
  *                   default: true
  *                 data:
@@ -249,7 +326,7 @@ router.put(respuesta + '/:respuestaId', [isAuth, isAdmin], actualizar);
  *                   default: true
  *                 data:
  *                   type: object
- *                   $ref: '#/definitions/Respuesta'
+ *                   $ref: '#/definitions/RespuestaDelete'
  */
 router.delete(respuesta + '/:respuestaId', [isAuth, isAdmin], borrar);
 
