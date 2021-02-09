@@ -112,8 +112,25 @@ mongoose.connect(MONGO_URL, {
                 apellido: 'admin',
                 email: 'admin@test.com',
                 telefono: '5555 5555',
-                password: bcrypt.hashSync('123456', 10),
+                password: bcrypt.hashSync('escalabNode', 10),
                 role: 'ADMIN_ROLE',
+            }
+            console.log('save............');
+            new ModelUsuario(data).save();
+
+        }
+    });
+
+    ModelUsuario.findOne({ email: 'user@test.com' }, (err, user) => {
+        if (!user) {
+
+            let data = {
+                nombre: 'user',
+                apellido: 'user',
+                email: 'user@test.com',
+                telefono: '5555 5555',
+                password: bcrypt.hashSync('escalabNode', 10),
+                role: 'User_ROLE',
             }
             console.log('save............');
             new ModelUsuario(data).save();
