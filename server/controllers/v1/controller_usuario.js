@@ -23,6 +23,7 @@ function errorHandler(err, next, item) {
 const usuarioById = (req, res, next, id) => {
 
     ModelUsuario.findById(id).populate("cursos.items.cursoId")
+        .select('-password')
         .where({ disponible: true })
         .exec((err, item) => {
 
@@ -61,7 +62,7 @@ const cursoById = (req, res, next, id) => {
 
 const listar = (req, res, next) => {
 
-    ModelUsuario.find().where({ disponible: true }).exec((err, items) => {
+    ModelUsuario.find().where({ disponible: true }).select('-password').exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 
@@ -95,7 +96,7 @@ const getId = (req, res, next) => {
 
 const listaxCurso = (req, res, next) => {
 
-    ModelUsuario.find({ "cursos.items.cursoId": req.docCurso._id }).where({ disponible: true }).exec((err, items) => {
+    ModelUsuario.find({ "cursos.items.cursoId": req.docCurso._id }).select('-password').where({ disponible: true }).exec((err, items) => {
 
         if (err || !items) return errorHandler(err, next, items)
 
@@ -129,6 +130,9 @@ const guardar = (req, res, next) => {
 
         if (err || !item) return errorHandler(err, next, item)
 
+        item = item.toObject();
+        delete item.password;
+
         res.json({
             result: true,
             data: item
@@ -150,6 +154,9 @@ const actualizar = (req, res, next) => {
 
         if (err || !item) return errorHandler(err, next, item)
 
+        item = item.toObject();
+        delete item.password;
+
         res.json({
             result: true,
             data: item
@@ -170,6 +177,9 @@ const borrar = (req, res, next) => {
     req.docUsuario.save((err, item) => {
 
         if (err || !item) return errorHandler(err, next, item)
+
+        item = item.toObject();
+        delete item.password;
 
         res.json({
             ok: true,

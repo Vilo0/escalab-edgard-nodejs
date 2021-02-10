@@ -75,6 +75,7 @@ const signup = (req, res, next) => {
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         email: req.body.email,
+        telefono: req.body.telefono,
         password: bcrypt.hashSync(req.body.password, Number(process.env.SALTH)),
         role: 'USER_ROLE'
     }
@@ -83,6 +84,9 @@ const signup = (req, res, next) => {
 
     modelUsuario.save((err, item) => {
         if (err || !item) return errorHandler(err, next, item);
+
+        item = item.toObject();
+        delete item.password;
 
         res.json({
             result: true,
@@ -94,13 +98,13 @@ const signup = (req, res, next) => {
 
 
 const logout = (req, res) => {
-    if (req.session) {
-        req.session.destroy(item => {
-            res.json({
-                result: true
-            })
+    // if (req.session) {
+    //     req.session.destroy(item => {
+    res.json({
+            result: true
         })
-    }
+        //     })
+        // }
 }
 
 module.exports = {
